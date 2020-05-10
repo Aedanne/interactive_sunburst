@@ -1,0 +1,880 @@
+<html>
+<head>
+<style>
+
+.highcharts-figure, .highcharts-data-table table {
+  min-width: 320px; 
+  max-width: 75%;
+  margin: 1em auto;
+  text-align: center;
+}
+
+.container {
+  
+  margin: 1em auto;
+  text-align: center;
+}
+
+.highcharts-data-table table {
+	font-family: Arial, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #EBEBEB;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+	max-width: 500px;
+}
+
+.highcharts-description {
+	font-family: Arial, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #EBEBEB;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+}
+
+.highcharts-subdescription {
+	font-family: Arial, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #EBEBEB;
+	margin: 10px auto;
+	text-align: left;
+	width: 100%;
+}
+
+.highcharts-data-table caption {
+  padding: 1em 0;
+  font-size: 1.2em;
+  color: #555;
+}
+.highcharts-data-table th {
+	font-weight: 600;
+  padding: 0.5em;
+}
+.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+  padding: 0.5em;
+}
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+  background: #f8f8f8;
+}
+.highcharts-data-table tr:hover {
+  background: #f1f7ff;
+}
+
+</style>
+</head>
+<body>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sunburst.js"></script>
+
+<div>
+<figure class="highcharts-figure">
+  <div id="container" class="container"></div>
+  <p class="highcharts-description">
+    <b>Navigation in Visualization</b><br>
+    Author: Charisse Hanson&nbsp;&nbsp;&nbsp;&nbsp;Date: May 10, 2020
+  </p>
+  <div class="highcharts-subdescription">
+	<i>*** This visualization is best viewed in Chrome web browser. </i>
+    <br>
+    <br>  
+    The Sunburst Chart is used for this assignment because it represents hierarchical, or multi-tiered, data in a visually appealing, easy to understand manner, and allows for easy navigation of data objects by the categorical levels. The slices of each arc is representative of the size of that sub-dataset, proportionate to the overall data at that arc level. For this sunburst chart, each song is given a value of 1, and each category/level will display the total song count included for that section. There are a total of 253 songs included in this visualization. 
+	<br>
+	<br>
+	The data tiers and relationships are: <b>music library (1) -> (m) music genre (1) -> (m) artist/band (1) -> (m) song</b>.  
+    <br>
+	<br>
+	This visualization has the potential to scale well for even larger datasets, if the data can be grouped into more levels or tiers, because of the drill-down functionality. However, if introducing additional tiers or levels is not possible, then this chart will look very cluttered with datasets comprised of 200+ objects. The tooltips do provide more visibility to the data detail, but it will not be ideal as the only source of information for the slice. Increasing the radius of the sunburst could possibly alleviate some of this constraint, but that would also be limited to the window view size of the end-user, and may result to the likelihood of negatively affecting the user experience.
+	<br>
+    <div style="font-size:14;">
+	<br>
+	<u>Interactive Controls:</u> 
+	<ul>
+	<li>Clicking on any of the Music Genre and Artist/Band areas will drill-down to that level of the arc.</li>
+	<li>When drilled to the Music Genre or the Artist/Band levels, clicking on the center area of the sunburst will take you back to that level's parent.</li>
+	<li>Click the "Back" button in the upper right corner to reset back to the previous level, similar to clicking in the center area.</li>
+	<li>The tooltips include a hyperlink that will take you to either the YouTube video of the song, when mouse-over a specific song section, or the Wiki site when mouse-over a Genre or Artist/Band section.</li>
+	</ul></div>
+    <br>
+	This uses the Highcharts js library for the sunburst chart module, and uses the demo sample as the base source code. The tooltips are modified to add a direct link to the YouTube video (for song objects) or Wikipedia site (for genre and artist/band objects). Additional display elements are modified to improve viewability.
+    <br>
+    <br>Highcharts Demo Source: <a href="https://www.highcharts.com/demo/sunburst" target="_blank">https://www.highcharts.com/demo/sunburst</a>
+    
+
+  </div>
+ 
+</figure>
+</div>
+<div>
+</div>  
+
+
+<script>
+
+/* 
+Author: Charisse Hanson 
+Library: highcharts sunburst module 
+Base code: https://www.highcharts.com/demo/sunburst
+*/
+
+var data = [{
+  id: "Music Library",
+  parent: "",
+  name: "Music<br>Library", 
+  value: 253
+},
+
+/* Music Genres */
+{
+  id: "Classical",
+  parent: "Music Library",
+  name: "Classical",
+  description: "https://en.wikipedia.org/wiki/Classical_music",
+  value: 6
+}, {
+  id: "Country",
+  parent: "Music Library",
+  name: "Country",
+  description: "https://en.wikipedia.org/wiki/Country_music",
+  value: 22
+}, {
+  id: "Folk",
+  parent: "Music Library",
+  name: "Folk",
+  description: "https://en.wikipedia.org/wiki/Folk_music",
+  value: 19
+}, {
+  id: "Hip Hop",
+  parent: "Music Library",
+  name: "Hip Hop",
+  description: "https://en.wikipedia.org/wiki/Hip_hop_music",
+  value: 25
+}, {  
+  id: "Pop",
+  parent: "Music Library",
+  name: "Pop",
+  description: "https://en.wikipedia.org/wiki/Pop_music",
+  value: 88
+}, {
+  id: "Rhythm & Blues",
+  parent: "Music Library",
+  name: "R-n-B",
+  description: "https://en.wikipedia.org/wiki/Rhythm_and_blues",
+  value: 13
+}, {
+  id: "Rock",
+  parent: "Music Library",
+  name: "Rock",
+  description: "https://en.wikipedia.org/wiki/Rock_music",
+  value: 80
+},
+
+
+/* Pop */
+{
+  id: "Adele",
+  parent: "Pop",
+  name: "Adele",
+  description: "https://en.wikipedia.org/wiki/Adele",
+  value: 9
+}, {
+  id: "Alicia Keys",
+  parent: "Pop",
+  name: "Alicia Keys",
+  description: "https://en.wikipedia.org/wiki/Alicia_Keys",
+  value: 4
+}, {
+  id: "Backstreet Boys",
+  parent: "Pop",
+  name: "Backstreet Boys",
+  description: "https://en.wikipedia.org/wiki/Backstreet_Boys",
+  value: 5
+}, {
+  id: "Bruno Mars",
+  parent: "Pop",
+  name: "Bruno Mars",
+  description: "https://en.wikipedia.org/wiki/Bruno_Mars",
+  value: 4
+}, {
+  id: "Ed Sheeran",
+  parent: "Pop",
+  name: "Ed Sheeran",
+  description: "https://en.wikipedia.org/wiki/Ed_Sheeran",
+  value: 3
+}, {
+  id: "Elton John",
+  parent: "Pop",
+  name: "Elton John",
+  description: "https://en.wikipedia.org/wiki/Elton_John",
+  value: 6
+}, {
+  id: "Imagine Dragons",
+  parent: "Pop",
+  name: "Imagine Dragons",
+  description: "https://en.wikipedia.org/wiki/Imagine_Dragons",
+  value: 3
+}, {
+  id: "Jessie J",
+  parent: "Pop",
+  name: "Jessie J",
+  description: "https://en.wikipedia.org/wiki/Jessie_J",
+  value: 5
+}, {
+  id: "Justin Bieber",
+  parent: "Pop",
+  name: "Justin Bieber",
+  description: "https://en.wikipedia.org/wiki/Justin_Bieber",
+  value: 3
+}, {
+  id: "Katy Perry",
+  parent: "Pop",
+  name: "Katy Perry",
+  description: "https://en.wikipedia.org/wiki/Katy_Perry",
+  value: 6
+}, {
+  id: "Kelly Clarkson",
+  parent: "Pop",
+  name: "Kelly Clarkson",
+  description: "https://en.wikipedia.org/wiki/Kelly_Clarkson",
+  value: 6
+}, {
+  id: "Lorde",
+  parent: "Pop",
+  name: "Lorde",
+  description: "https://en.wikipedia.org/wiki/Lorde",
+  value: 3
+}, {
+  id: "Maroon 5",
+  parent: "Pop",
+  name: "Maroon 5",
+  description: "https://en.wikipedia.org/wiki/Maroon_5",
+  value: 9
+}, {
+  id: "One Republic",
+  parent: "Pop",
+  name: "One Republic",
+  description: "https://en.wikipedia.org/wiki/OneRepublic",
+  value: 9
+}, {
+  id: "P!nk",
+  parent: "Pop",
+  name: "P!nk",
+  description: "https://en.wikipedia.org/wiki/Pink_(singer)",
+  value: 5
+}, {
+  id: "Sarah McLachlan",
+  parent: "Pop",
+  name: "Sarah McLachlan",
+  description: "https://en.wikipedia.org/wiki/Sarah_McLachlan",
+  value: 8
+},
+
+/* POP SONGS */
+{ id: "All I Ask", parent: "Adele",  name: "All I Ask", value: 1, description: "https://www.youtube.com/watch?v=FOn8SdYF7eg"},
+{ id: "Remedy", parent: "Adele",  name: "Remedy", value: 1, description: "https://www.youtube.com/watch?v=-fsCc7Be1H0"},
+{ id: "Right as Rain", parent: "Adele",  name: "Right as Rain", value: 1, description: "https://www.youtube.com/watch?v=1NCIKcnPmzU"},
+{ id: "Rumour Has It", parent: "Adele",  name: "Rumour Has It", value: 1, description: "https://www.youtube.com/watch?v=C1G3jmtoOfk"},
+{ id: "Send My Love", parent: "Adele",  name: "Send My Love", value: 1, description: "https://www.youtube.com/watch?v=fk4BbF7B29w"},
+{ id: "Skyfall", parent: "Adele",  name: "Skyfall", value: 1, description: "https://www.youtube.com/watch?v=DeumyOzKqgI"},
+{ id: "Someone Like You", parent: "Adele",  name: "Someone Like You", value: 1, description: "https://www.youtube.com/watch?v=hLQl3WQQoQ0"},
+{ id: "To Make You Feel My Love", parent: "Adele",  name: "To Make You Feel My Love", value: 1, description: "https://www.youtube.com/watch?v=cRpICG6tlHQ"},
+{ id: "When We Were Young", parent: "Adele",  name: "When We Were Young", value: 1, description: "https://www.youtube.com/watch?v=DDWKuo3gXMQ"},
+{ id: "Fallin'", parent: "Alicia Keys",  name: "Fallin'", value: 1, description: "https://www.youtube.com/watch?v=Urdlvw0SSEc"},
+{ id: "Girl on Fire", parent: "Alicia Keys",  name: "Girl on Fire", value: 1, description: "https://www.youtube.com/watch?v=J91ti_MpdHA"},
+{ id: "If I Ain't Got You", parent: "Alicia Keys",  name: "If I Ain't Got You", value: 1, description: "https://www.youtube.com/watch?v=Ju8Hr50Ckwk"},
+{ id: "Teenage Love Affair", parent: "Alicia Keys",  name: "Teenage Love Affair", value: 1, description: "https://www.youtube.com/watch?v=UJs6WClFqJU"},
+{ id: "As Long As You Love Me", parent: "Backstreet Boys",  name: "As Long As You Love Me", value: 1, description: "https://www.youtube.com/watch?v=0Gl2QnHNpkA"},
+{ id: "Everybody", parent: "Backstreet Boys",  name: "Everybody", value: 1, description: "https://www.youtube.com/watch?v=6M6samPEMpM"},
+{ id: "I Want It That Way", parent: "Backstreet Boys",  name: "I Want It That Way", value: 1, description: "https://www.youtube.com/watch?v=4fndeDfaWCg"},
+{ id: "Incomplete", parent: "Backstreet Boys",  name: "Incomplete", value: 1, description: "https://www.youtube.com/watch?v=WVe80iZtlYU"},
+{ id: "Larger Than Life", parent: "Backstreet Boys",  name: "Larger Than Life", value: 1, description: "https://www.youtube.com/watch?v=MEb2CecR11I"},
+{ id: "24k Magic", parent: "Bruno Mars",  name: "24k Magic", value: 1, description: "https://www.youtube.com/watch?v=UqyT8IEBkvY"},
+{ id: "Just the Way You Are", parent: "Bruno Mars",  name: "Just the Way You Are", value: 1, description: "https://www.youtube.com/watch?v=LjhCEhWiKXk"},
+{ id: "Uptown Funk", parent: "Bruno Mars",  name: "Uptown Funk", value: 1, description: "https://www.youtube.com/watch?v=OPf0YbXqDm0"},
+{ id: "When I Was Your Man", parent: "Bruno Mars",  name: "When I Was Your Man", value: 1, description: "https://www.youtube.com/watch?v=ekzHIouo8Q4"},
+{ id: "Perfect", parent: "Ed Sheeran",  name: "Perfect", value: 1, description: "https://www.youtube.com/watch?v=2Vv-BfVoq4g"},
+{ id: "Shape of You", parent: "Ed Sheeran",  name: "Shape of You", value: 1, description: "https://www.youtube.com/watch?v=JGwWNGJdvx8"},
+{ id: "Thinking Out Loud", parent: "Ed Sheeran",  name: "Thinking Out Loud", value: 1, description: "https://www.youtube.com/watch?v=lp-EO5I60KA"},
+{ id: "Bennie and the Jets", parent: "Elton John",  name: "Bennie and the Jets", value: 1, description: "https://www.youtube.com/watch?v=wo1OwRTRKRk"},
+{ id: "Circle of Life", parent: "Elton John",  name: "Circle of Life", value: 1, description: "https://www.youtube.com/watch?v=IwH9YvhPN7c"},
+{ id: "Goodbye Yellow Brick Road", parent: "Elton John",  name: "Goodbye Yellow Brick Road", value: 1, description: "https://www.youtube.com/watch?v=Vgy6ANiEaY8"},
+{ id: "Rocket Man", parent: "Elton John",  name: "Rocket Man", value: 1, description: "https://www.youtube.com/watch?v=DtVBCG6ThDk"},
+{ id: "Tiny Dancer", parent: "Elton John",  name: "Tiny Dancer", value: 1, description: "https://www.youtube.com/watch?v=yYcyacLRPNs"},
+{ id: "Your Song", parent: "Elton John",  name: "Your Song", value: 1, description: "https://www.youtube.com/watch?v=GlPlfCy1urI"},
+{ id: "Demons", parent: "Imagine Dragons",  name: "Demons", value: 1, description: "https://www.youtube.com/watch?v=mWRsgZuwf_8"},
+{ id: "Radioactive", parent: "Imagine Dragons",  name: "Radioactive", value: 1, description: "https://www.youtube.com/watch?v=ktvTqknDobU"},
+{ id: "Warriors", parent: "Imagine Dragons",  name: "Warriors", value: 1, description: "https://www.youtube.com/watch?v=Tscfrv6ZXSs"},
+{ id: "Bang Bang", parent: "Jessie J",  name: "Bang Bang", value: 1, description: "https://www.youtube.com/watch?v=0HDdjwpPM3Y"},
+{ id: "Domino", parent: "Jessie J",  name: "Domino", value: 1, description: "https://www.youtube.com/watch?v=UJtB55MaoD0"},
+{ id: "Flashlight", parent: "Jessie J",  name: "Flashlight", value: 1, description: "https://www.youtube.com/watch?v=DzwkcbTQ7ZE"},
+{ id: "Masterpiece", parent: "Jessie J",  name: "Masterpiece", value: 1, description: "https://www.youtube.com/watch?v=PTOFEgJ9zzI"},
+{ id: "Price Tag", parent: "Jessie J",  name: "Price Tag", value: 1, description: "https://www.youtube.com/watch?v=qMxX-QOV9tI"},
+{ id: "Baby", parent: "Justin Bieber",  name: "Baby", value: 1, description: "https://www.youtube.com/watch?v=kffacxfA7G4"},
+{ id: "Love Yourself", parent: "Justin Bieber",  name: "Love Yourself", value: 1, description: "https://www.youtube.com/watch?v=oyEuk8j8imI"},
+{ id: "Sorry", parent: "Justin Bieber",  name: "Sorry", value: 1, description: "https://www.youtube.com/watch?v=fRh_vgS2dFE"},
+{ id: "California Gurls", parent: "Katy Perry",  name: "California Gurls", value: 1, description: "https://www.youtube.com/watch?v=F57P9C4SAW4"},
+{ id: "Dark Horse", parent: "Katy Perry",  name: "Dark Horse", value: 1, description: "https://www.youtube.com/watch?v=0KSOMA3QBU0"},
+{ id: "Firework", parent: "Katy Perry",  name: "Firework", value: 1, description: "https://www.youtube.com/watch?v=QGJuMBdaqIw"},
+{ id: "I Kissed a Girl", parent: "Katy Perry",  name: "I Kissed a Girl", value: 1, description: "https://www.youtube.com/watch?v=tAp9BKosZXs"},
+{ id: "Roar", parent: "Katy Perry",  name: "Roar", value: 1, description: "https://www.youtube.com/watch?v=CevxZvSJLk8"},
+{ id: "The One That Got Away", parent: "Katy Perry",  name: "The One That Got Away", value: 1, description: "https://www.youtube.com/watch?v=Ahha3Cqe_fk"},
+{ id: "Because of You", parent: "Kelly Clarkson",  name: "Because of You", value: 1, description: "https://www.youtube.com/watch?v=Ra-Om7UMSJc"},
+{ id: "Behind These Hazel Eyes", parent: "Kelly Clarkson",  name: "Behind These Hazel Eyes", value: 1, description: "https://www.youtube.com/watch?v=yipoOY56MbM"},
+{ id: "Miss Independent", parent: "Kelly Clarkson",  name: "Miss Independent", value: 1, description: "https://www.youtube.com/watch?v=dS1ZW0FdoIU"},
+{ id: "My Life Would Suck Without You", parent: "Kelly Clarkson",  name: "My Life Would Suck Without You", value: 1, description: "https://www.youtube.com/watch?v=cRM70Jw7F4M"},
+{ id: "Since U Been Gone", parent: "Kelly Clarkson",  name: "Since U Been Gone", value: 1, description: "https://www.youtube.com/watch?v=R7UrFYvl5TE"},
+{ id: "Stronger", parent: "Kelly Clarkson",  name: "Stronger", value: 1, description: "https://www.youtube.com/watch?v=Xn676-fLq7I"},
+{ id: "Royals", parent: "Lorde",  name: "Royals", value: 1, description: "https://www.youtube.com/watch?v=nlcIKh6sBtc"},
+{ id: "Team", parent: "Lorde",  name: "Team", value: 1, description: "https://www.youtube.com/watch?v=f2JuxM-snGc"},
+{ id: "The Love Club", parent: "Lorde",  name: "The Love Club", value: 1, description: "https://www.youtube.com/watch?v=mguU1m4mKII"},
+{ id: "Daylight", parent: "Maroon 5",  name: "Daylight", value: 1, description: "https://www.youtube.com/watch?v=N17FXwRWEZs"},
+{ id: "Harder To Breathe", parent: "Maroon 5",  name: "Harder To Breathe", value: 1, description: "https://www.youtube.com/watch?v=rV8NHsmVMPE"},
+{ id: "Love Somebody", parent: "Maroon 5",  name: "Love Somebody", value: 1, description: "https://www.youtube.com/watch?v=MU8B4XDI3Uw"},
+{ id: "Misery", parent: "Maroon 5",  name: "Misery", value: 1, description: "https://www.youtube.com/watch?v=6g6g2mvItp4"},
+{ id: "Moves Like Jagger", parent: "Maroon 5",  name: "Moves Like Jagger", value: 1, description: "https://www.youtube.com/watch?v=iEPTlhBmwRg"},
+{ id: "Payphone", parent: "Maroon 5",  name: "Payphone", value: 1, description: "https://www.youtube.com/watch?v=KRaWnd3LJfs"},
+{ id: "She Will Be Loved", parent: "Maroon 5",  name: "She Will Be Loved", value: 1, description: "https://www.youtube.com/watch?v=nIjVuRTm-dc"},
+{ id: "Sugar", parent: "Maroon 5",  name: "Sugar", value: 1, description: "https://www.youtube.com/watch?v=09R8_2nJtjg"},
+{ id: "This Love", parent: "Maroon 5",  name: "This Love", value: 1, description: "https://www.youtube.com/watch?v=XPpTgCho5ZA"},
+{ id: "All the Right Moves", parent: "One Republic",  name: "All the Right Moves", value: 1, description: "https://www.youtube.com/watch?v=qrOeGCJdZe4"},
+{ id: "All This Time", parent: "One Republic",  name: "All This Time", value: 1, description: "https://www.youtube.com/watch?v=T7lUj_OSxhA"},
+{ id: "Burning Bridges", parent: "One Republic",  name: "Burning Bridges", value: 1, description: "https://www.youtube.com/watch?v=8HaU7Lq0tew"},
+{ id: "Counting Stars", parent: "One Republic",  name: "Counting Stars", value: 1, description: "https://www.youtube.com/watch?v=hT_nvWreIhg"},
+{ id: "Good Life", parent: "One Republic",  name: "Good Life", value: 1, description: "https://www.youtube.com/watch?v=jZhQOvvV45w"},
+{ id: "If I Lose Myself", parent: "One Republic",  name: "If I Lose Myself", value: 1, description: "https://www.youtube.com/watch?v=TGx0rApSk6w"},
+{ id: "Secrets", parent: "One Republic",  name: "Secrets", value: 1, description: "https://www.youtube.com/watch?v=qHm9MG9xw1o"},
+{ id: "Somebody to Love", parent: "One Republic",  name: "Somebody to Love", value: 1, description: "https://www.youtube.com/watch?v=1qdo91-z7EQ"},
+{ id: "Something I Need", parent: "One Republic",  name: "Something I Need", value: 1, description: "https://www.youtube.com/watch?v=qKCGBgOgp08"},
+{ id: "Blow Me", parent: "P!nk",  name: "Blow Me", value: 1, description: "https://www.youtube.com/watch?v=3jNlIGDRkvQ"},
+{ id: "Just Give Me a Reason", parent: "P!nk",  name: "Just Give Me a Reason", value: 1, description: "https://www.youtube.com/watch?v=OpQFFLBMEPI"},
+{ id: "Just Like Fire", parent: "P!nk",  name: "Just Like Fire", value: 1, description: "https://www.youtube.com/watch?v=5Nrv5teMc9Y"},
+{ id: "Try", parent: "P!nk",  name: "Try", value: 1, description: "https://www.youtube.com/watch?v=yTCDVfMz15M"},
+{ id: "What About Us", parent: "P!nk",  name: "What About Us", value: 1, description: "https://www.youtube.com/watch?v=ClU3fctbGls"},
+{ id: "Adia", parent: "Sarah McLachlan",  name: "Adia", value: 1, description: "https://www.youtube.com/watch?v=Q5wW8N4pt3U"},
+{ id: "Angel", parent: "Sarah McLachlan",  name: "Angel", value: 1, description: "https://www.youtube.com/watch?v=i1GmxMTwUgs"},
+{ id: "Building a Mystery", parent: "Sarah McLachlan",  name: "Building a Mystery", value: 1, description: "https://www.youtube.com/watch?v=_QUq72fla3o"},
+{ id: "Fallen", parent: "Sarah McLachlan",  name: "Fallen", value: 1, description: "https://www.youtube.com/watch?v=Jqps9ZdMxs0"},
+{ id: "Good Enough", parent: "Sarah McLachlan",  name: "Good Enough", value: 1, description: "https://www.youtube.com/watch?v=ZjKPJbtghvs"},
+{ id: "Hold On", parent: "Sarah McLachlan",  name: "Hold On", value: 1, description: "https://www.youtube.com/watch?v=MHBmpGLGyk8"},
+{ id: "I Will Remember You", parent: "Sarah McLachlan",  name: "I Will Remember You", value: 1, description: "https://www.youtube.com/watch?v=B51hO8McLbs"},
+{ id: "Sweet Surrender", parent: "Sarah McLachlan",  name: "Sweet Surrender", value: 1, description: "https://www.youtube.com/watch?v=h2JWJYLNUq4"},
+
+
+/* R N B */
+{
+  id: "Bill Withers",
+  parent: "Rhythm & Blues",
+  name: "Bill Withers",
+  description: "https://en.wikipedia.org/wiki/Bill_Withers",
+  value: 2
+}, {
+  id: "Etta James",
+  parent: "Rhythm & Blues",
+  name: "Etta James",
+  description: "https://en.wikipedia.org/wiki/Etta_James",
+  value: 1
+}, {
+  id: "John Legend",
+  parent: "Rhythm & Blues",
+  name: "John Legend",
+  description: "https://en.wikipedia.org/wiki/John_Legend",
+  value: 2
+}, {
+  id: "K-Ci & Jojo",
+  parent: "Rhythm & Blues",
+  name: "K-Ci & Jojo",
+  description: "https://en.wikipedia.org/wiki/K-Ci_%26_JoJo",
+  value: 3
+}, {
+  id: "Usher",
+  parent: "Rhythm & Blues",
+  name: "Usher",
+  description: "https://en.wikipedia.org/wiki/Usher_(musician)",
+  value: 5
+}, 
+
+/* RNB SONGS */
+{ id: "Ain't No Sunshine", parent: "Bill Withers",  name: "Ain't No Sunshine", value: 1, description: "https://www.youtube.com/watch?v=YuKfiH0Scao"},
+{ id: "Lean On Me", parent: "Bill Withers",  name: "Lean On Me", value: 1, description: "https://www.youtube.com/watch?v=fOZ-MySzAac"},
+{ id: "At Last", parent: "Etta James",  name: "At Last", value: 1, description: "https://www.youtube.com/watch?v=1qJU8G7gR_g"},
+{ id: "All of Me", parent: "John Legend",  name: "All of Me", value: 1, description: "https://www.youtube.com/watch?v=450p7goxZqg"},
+{ id: "Ordinary People", parent: "John Legend",  name: "Ordinary People", value: 1, description: "https://www.youtube.com/watch?v=PIh07c_P4hc"},
+{ id: "All My Life", parent: "K-Ci & Jojo",  name: "All My Life", value: 1, description: "https://www.youtube.com/watch?v=DXvMT_mVbqw"},
+{ id: "Tell me it's Real", parent: "K-Ci & Jojo",  name: "Tell me it's Real", value: 1, description: "https://www.youtube.com/watch?v=41GHAV-HG4U"},
+{ id: "This Very Moment", parent: "K-Ci & Jojo",  name: "This Very Moment", value: 1, description: "https://www.youtube.com/watch?v=v1IBB3rgt6o"},
+{ id: "Burn", parent: "Usher",  name: "Burn", value: 1, description: "https://www.youtube.com/watch?v=t5XNWFw5HVw"},
+{ id: "Confessions Part II", parent: "Usher",  name: "Confessions Part II", value: 1, description: "https://www.youtube.com/watch?v=5Sy19X0xxrM"},
+{ id: "My Boo", parent: "Usher",  name: "My Boo", value: 1, description: "https://www.youtube.com/watch?v=fPgf2meEX1w"},
+{ id: "U Got It Bad", parent: "Usher",  name: "U Got It Bad", value: 1, description: "https://www.youtube.com/watch?v=o3IWTfcks4k"},
+{ id: "Yeah!", parent: "Usher",  name: "Yeah!", value: 1, description: "https://www.youtube.com/watch?v=GxBSyx85Kp8"},
+
+
+/* Folk */
+{
+  id: "Bob Dylan",
+  parent: "Folk",
+  name: "Bob Dylan",
+  description: "https://en.wikipedia.org/wiki/Bob_Dylan",
+  value: 5
+}, {
+  id: "Lumineers",
+  parent: "Folk",
+  name: "Lumineers",
+  description: "https://en.wikipedia.org/wiki/The_Lumineers",
+  value: 4
+}, {
+  id: "Mumford and Sons",
+  parent: "Folk",
+  name: "Mumford and Sons",
+  description: "https://en.wikipedia.org/wiki/Mumford_%26_Sons",
+  value: 5
+}, {
+  id: "Neil Young",
+  parent: "Folk",
+  name: "Neil Young",
+  description: "https://en.wikipedia.org/wiki/Neil_Young",
+  value: 5
+}, 
+
+/* FOLK SONGS */
+{ id: "Blowin' In The Wind", parent: "Bob Dylan",  name: "Blowin' In The Wind", value: 1, description: "https://www.youtube.com/watch?v=MMFj8uDubsE"},
+{ id: "High Water", parent: "Bob Dylan",  name: "High Water", value: 1, description: "https://www.youtube.com/watch?v=x-GL8tvzcP8"},
+{ id: "Knockin' On Heaven's Door", parent: "Bob Dylan",  name: "Knockin' On Heaven's Door", value: 1, description: "https://www.youtube.com/watch?v=rm9coqlk8fY"},
+{ id: "Like a Rolling Stone", parent: "Bob Dylan",  name: "Like a Rolling Stone", value: 1, description: "https://www.youtube.com/watch?v=IwOfCgkyEj0"},
+{ id: "Mr. Tamborine Man", parent: "Bob Dylan",  name: "Mr. Tamborine Man", value: 1, description: "https://www.youtube.com/watch?v=oecX_1pqxk0"},
+{ id: "Flowers in Your Hair", parent: "Lumineers",  name: "Flowers in Your Hair", value: 1, description: "https://www.youtube.com/watch?v=Dfpgn7lVq90"},
+{ id: "Ho Hey", parent: "Lumineers",  name: "Ho Hey", value: 1, description: "https://www.youtube.com/watch?v=zvCBSSwgtg4"},
+{ id: "Ophelia", parent: "Lumineers",  name: "Ophelia", value: 1, description: "https://www.youtube.com/watch?v=pTOC_q0NLTk"},
+{ id: "Stubborn Love", parent: "Lumineers",  name: "Stubborn Love", value: 1, description: "https://www.youtube.com/watch?v=UJWk_KNbDHo"},
+{ id: "Awake My Soul", parent: "Mumford and Sons",  name: "Awake My Soul", value: 1, description: "https://www.youtube.com/watch?v=KpcBjt8Wqg8"},
+{ id: "Dust Bowl Dance", parent: "Mumford and Sons",  name: "Dust Bowl Dance", value: 1, description: "https://www.youtube.com/watch?v=7Z2yY5GhDto"},
+{ id: "I Will Wait", parent: "Mumford and Sons",  name: "I Will Wait", value: 1, description: "https://www.youtube.com/watch?v=rGKfrgqWcv0"},
+{ id: "The Cave", parent: "Mumford and Sons",  name: "The Cave", value: 1, description: "https://www.youtube.com/watch?v=fNy8llTLvuA"},
+{ id: "White Blank Page", parent: "Mumford and Sons",  name: "White Blank Page", value: 1, description: "https://www.youtube.com/watch?v=qk14HJgJqfo"},
+{ id: "Down By The River", parent: "Neil Young",  name: "Down By The River", value: 1, description: "https://www.youtube.com/watch?v=KflCXmEX6BY"},
+{ id: "Heart of Gold", parent: "Neil Young",  name: "Heart of Gold", value: 1, description: "https://www.youtube.com/watch?v=X3IA6pIVank"},
+{ id: "Hey Hey, My My", parent: "Neil Young",  name: "Hey Hey, My My", value: 1, description: "https://www.youtube.com/watch?v=331kyZ9OXMc"},
+{ id: "Ohio", parent: "Neil Young",  name: "Ohio", value: 1, description: "https://www.youtube.com/watch?v=l1PrUU2S_iw"},
+{ id: "Old Man", parent: "Neil Young",  name: "Old Man", value: 1, description: "https://www.youtube.com/watch?v=rAtDrFdomN4"},
+
+
+/* Country */
+{
+  id: "Faith Hill",
+  parent: "Country",
+  name: "Faith Hill",
+  description: "https://en.wikipedia.org/wiki/Faith_Hill",
+  value: 3
+}, {
+  id: "Johnny Cash",
+  parent: "Country",
+  name: "Johnny Cash",
+  description: "https://en.wikipedia.org/wiki/Johnny_Cash",
+  value: 6
+}, {
+  id: "Shania Twain",
+  parent: "Country",
+  name: "Shania Twain",
+  description: "https://en.wikipedia.org/wiki/Shania_Twain",
+  value: 5
+}, {
+  id: "Taylor Swift",
+  parent: "Country",
+  name: "Taylor Swift",
+  description: "https://en.wikipedia.org/wiki/Taylor_Swift",
+  value: 5
+}, {
+  id: "Tim McGraw",
+  parent: "Country",
+  name: "Tim McGraw",
+  description: "https://en.wikipedia.org/wiki/Tim_McGraw",
+  value: 3
+}, 
+
+/* COUNTRY SONGS */
+{ id: "Breathe", parent: "Faith Hill",  name: "Breathe", value: 1, description: "https://www.youtube.com/watch?v=yCmsZUN4r_s"},
+{ id: "The Way You Love Me", parent: "Faith Hill",  name: "The Way You Love Me", value: 1, description: "https://www.youtube.com/watch?v=o8EamHKpdrM"},
+{ id: "This Kiss", parent: "Faith Hill",  name: "This Kiss", value: 1, description: "https://www.youtube.com/watch?v=dls_cBmUt7Q"},
+{ id: "A Boy Named Sue", parent: "Johnny Cash",  name: "A Boy Named Sue", value: 1, description: "https://www.youtube.com/watch?v=tA1Pey1bHFk"},
+{ id: "A Thing Called Love", parent: "Johnny Cash",  name: "A Thing Called Love", value: 1, description: "https://www.youtube.com/watch?v=fHqrxnkcx_c"},
+{ id: "Folsom Prison Blues", parent: "Johnny Cash",  name: "Folsom Prison Blues", value: 1, description: "https://www.youtube.com/watch?v=0_SJ2e9Dbc8"},
+{ id: "Hurt", parent: "Johnny Cash",  name: "Hurt", value: 1, description: "https://www.youtube.com/watch?v=8AHCfZTRGiI"},
+{ id: "Riders in the Sky", parent: "Johnny Cash",  name: "Riders in the Sky", value: 1, description: "https://www.youtube.com/watch?v=0Fhy8o7ufi8"},
+{ id: "Ring of Fire", parent: "Johnny Cash",  name: "Ring of Fire", value: 1, description: "https://www.youtube.com/watch?v=5WyLhwYFgmk"},
+{ id: "From This Moment On", parent: "Shania Twain",  name: "From This Moment On", value: 1, description: "https://www.youtube.com/watch?v=a-Lp2uC_1lg"},
+{ id: "Man! I Feel Like a Woman!", parent: "Shania Twain",  name: "Man! I Feel Like a Woman!", value: 1, description: "https://www.youtube.com/watch?v=ZJL4UGSbeFg"},
+{ id: "That Don't Impress Me Much", parent: "Shania Twain",  name: "That Don't Impress Me Much", value: 1, description: "https://www.youtube.com/watch?v=mqFLXayD6e8"},
+{ id: "You're Still the One", parent: "Shania Twain",  name: "You're Still the One", value: 1, description: "https://www.youtube.com/watch?v=KNZH-emehxA"},
+{ id: "You've Got a Way", parent: "Shania Twain",  name: "You've Got a Way", value: 1, description: "https://www.youtube.com/watch?v=Cytj0nrLaCs"},
+{ id: "I Knew You Were Trouble", parent: "Taylor Swift",  name: "I Knew You Were Trouble", value: 1, description: "https://www.youtube.com/watch?v=vNoKguSdy4Y"},
+{ id: "Love Story", parent: "Taylor Swift",  name: "Love Story", value: 1, description: "https://www.youtube.com/watch?v=8xg3vE8Ie_E"},
+{ id: "Shake It Off", parent: "Taylor Swift",  name: "Shake It Off", value: 1, description: "https://www.youtube.com/watch?v=nfWlot6h_JM"},
+{ id: "Teardrops on my Guitar", parent: "Taylor Swift",  name: "Teardrops on my Guitar", value: 1, description: "https://www.youtube.com/watch?v=xKCek6_dB0M"},
+{ id: "You Belong With Me", parent: "Taylor Swift",  name: "You Belong With Me", value: 1, description: "https://www.youtube.com/watch?v=VuNIsY6JdUw"},
+{ id: "I Need You", parent: "Tim McGraw",  name: "I Need You", value: 1, description: "https://www.youtube.com/watch?v=MmxqAGmAttU"},
+{ id: "It's Your Love", parent: "Tim McGraw",  name: "It's Your Love", value: 1, description: "https://www.youtube.com/watch?v=2AJ4i4S_fP8"},
+{ id: "Live Like You Were Dying", parent: "Tim McGraw",  name: "Live Like You Were Dying", value: 1, description: "https://www.youtube.com/watch?v=_9TShlMkQnc"},
+
+
+/* Classical */
+{
+  id: "Franz Schubert",
+  parent: "Classical",
+  name: "Franz Schubert",
+  description: "https://en.wikipedia.org/wiki/Franz_Schubert",
+  value: 1
+}, {
+  id: "Frederic Chopin",
+  parent: "Classical",
+  name: "Frederic Chopin",
+  description: "https://en.wikipedia.org/wiki/Fr%C3%A9d%C3%A9ric_Chopin",
+  value: 1
+}, {
+  id: "Johann Pachelbel",
+  parent: "Classical",
+  name: "Johann Pachelbel",
+  description: "https://en.wikipedia.org/wiki/Johann_Pachelbel",
+  value: 1
+}, {
+  id: "Pyotr Ilyich Tchaikovsky",
+  parent: "Classical",
+  name: "Pyotr Ilyich Tchaikovsky",
+  description: "https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky",
+  value: 3
+}, 
+
+/* CLASSICAL SONGS */
+{ id: "Ave Maria", parent: "Franz Schubert",  name: "Ave Maria", value: 1, description: "https://www.youtube.com/watch?v=XpYGgtrMTYs"},
+{ id: "Etude in E, Tristesse", parent: "Frederic Chopin",  name: "Etude in E, Tristesse", value: 1, description: "https://www.youtube.com/watch?v=bzBH9Nm1BP8"},
+{ id: "Canon in D", parent: "Johann Pachelbel",  name: "Canon in D", value: 1, description: "https://www.youtube.com/watch?v=Ptk_1Dc2iPY"},
+{ id: "Dance of the Sugar Plum Fairy", parent: "Pyotr Ilyich Tchaikovsky",  name: "Dance of the Sugar Plum Fairy", value: 1, description: "https://www.youtube.com/watch?v=B9zRToy-mwk"},
+{ id: "Walts of the Snowflakes", parent: "Pyotr Ilyich Tchaikovsky",  name: "Walts of the Snowflakes", value: 1, description: "https://www.youtube.com/watch?v=UYaIQNjAX_8"},
+{ id: "Waltz of the Flowers", parent: "Pyotr Ilyich Tchaikovsky",  name: "Waltz of the Flowers", value: 1, description: "https://www.youtube.com/watch?v=QxHkLdQy5f0"},
+
+
+/* Hip Hop */
+{
+  id: "Black Eyed Peas",
+  parent: "Hip Hop",
+  name: "Black Eyed Peas",
+  description: "https://en.wikipedia.org/wiki/The_Black_Eyed_Peas",
+  value: 7
+}, {
+  id: "Bone Thugs N Harmony",
+  parent: "Hip Hop",
+  name: "Bone Thugs N Harmony",
+  description: "https://en.wikipedia.org/wiki/Bone_Thugs-n-Harmony",
+  value: 3
+}, {
+  id: "Coolio",
+  parent: "Hip Hop",
+  name: "Coolio",
+  description: "https://en.wikipedia.org/wiki/Coolio",
+  value: 2
+}, {
+  id: "Eminem",
+  parent: "Hip Hop",
+  name: "Eminem",
+  description: "https://en.wikipedia.org/wiki/Eminem",
+  value: 4
+}, {
+  id: "Gorillaz",
+  parent: "Hip Hop",
+  name: "Gorillaz",
+  description: "https://en.wikipedia.org/wiki/Gorillaz",
+  value: 3
+}, {
+  id: "Matisyahu",
+  parent: "Hip Hop",
+  name: "Matisyahu",
+  description: "https://en.wikipedia.org/wiki/Matisyahu",
+  value: 6
+}, 
+
+/* HIP HOP SONGS */
+{ id: "Boom Boom Pow", parent: "Black Eyed Peas",  name: "Boom Boom Pow", value: 1, description: "https://www.youtube.com/watch?v=4m48GqaOz90"},
+{ id: "I Gotta Feeling", parent: "Black Eyed Peas",  name: "I Gotta Feeling", value: 1, description: "https://www.youtube.com/watch?v=uSD4vsh1zDA"},
+{ id: "Let's Get It Started", parent: "Black Eyed Peas",  name: "Let's Get It Started", value: 1, description: "https://www.youtube.com/watch?v=IKqV7DB8Iwg"},
+{ id: "My Humps", parent: "Black Eyed Peas",  name: "My Humps", value: 1, description: "https://www.youtube.com/watch?v=iEe_eraFWWs"},
+{ id: "Pump It", parent: "Black Eyed Peas",  name: "Pump It", value: 1, description: "https://www.youtube.com/watch?v=ZaI2IlHwmgQ"},
+{ id: "Smells Like Funk", parent: "Black Eyed Peas",  name: "Smells Like Funk", value: 1, description: "https://www.youtube.com/watch?v=UksINzrxjPs"},
+{ id: "Where is the love?", parent: "Black Eyed Peas",  name: "Where is the love?", value: 1, description: "https://www.youtube.com/watch?v=WpYeekQkAdc"},
+{ id: "Crossroad", parent: "Bone Thugs N Harmony",  name: "Crossroad", value: 1, description: "https://www.youtube.com/watch?v=VMYAEHE2GrM"},
+{ id: "Ghetto Cowboy", parent: "Bone Thugs N Harmony",  name: "Ghetto Cowboy", value: 1, description: "https://www.youtube.com/watch?v=xSoUeoPlvHw"},
+{ id: "I Tried", parent: "Bone Thugs N Harmony",  name: "I Tried", value: 1, description: "https://www.youtube.com/watch?v=q4EiBFUpFXg"},
+{ id: "Gangsta's Paradise", parent: "Coolio",  name: "Gangsta's Paradise", value: 1, description: "https://www.youtube.com/watch?v=fPO76Jlnz6c"},
+{ id: "Hit 'em High", parent: "Coolio",  name: "Hit 'em High", value: 1, description: "https://www.youtube.com/watch?v=nvDQF0AoyNk"},
+{ id: "Lose Yourself", parent: "Eminem",  name: "Lose Yourself", value: 1, description: "https://www.youtube.com/watch?v=j-vlIjTlPAk"},
+{ id: "Love the Way You Lie", parent: "Eminem",  name: "Love the Way You Lie", value: 1, description: "https://www.youtube.com/watch?v=uelHwf8o7_U"},
+{ id: "My Name Is", parent: "Eminem",  name: "My Name Is", value: 1, description: "https://www.youtube.com/watch?v=sNPnbI1arSE"},
+{ id: "When I'm Gone", parent: "Eminem",  name: "When I'm Gone", value: 1, description: "https://www.youtube.com/watch?v=1wYNFfgrXTI"},
+{ id: "Clint Eastwood", parent: "Gorillaz",  name: "Clint Eastwood", value: 1, description: "https://www.youtube.com/watch?v=1V_xRb0x9aw"},
+{ id: "Feel Good Inc", parent: "Gorillaz",  name: "Feel Good Inc", value: 1, description: "https://www.youtube.com/watch?v=HyHNuVaZJ-k"},
+{ id: "Melancholy Hill", parent: "Gorillaz",  name: "Melancholy Hill", value: 1, description: "https://www.youtube.com/watch?v=04mfKJWDSzI"},
+{ id: "Driftin'", parent: "Matisyahu",  name: "Driftin'", value: 1, description: "https://www.youtube.com/watch?v=1X7mQxG-y_Y"},
+{ id: "King Without a Crown", parent: "Matisyahu",  name: "King Without a Crown", value: 1, description: "https://www.youtube.com/watch?v=ChV5BZ8SmS0"},
+{ id: "Live Like a Warrior", parent: "Matisyahu",  name: "Live Like a Warrior", value: 1, description: "https://www.youtube.com/watch?v=p53pDNodxHE"},
+{ id: "One Day", parent: "Matisyahu",  name: "One Day", value: 1, description: "https://www.youtube.com/watch?v=WRmBChQjZPs"},
+{ id: "Sunshine", parent: "Matisyahu",  name: "Sunshine", value: 1, description: "https://www.youtube.com/watch?v=E_Vt4MlbM0c"},
+{ id: "Warrior", parent: "Matisyahu",  name: "Warrior", value: 1, description: "https://www.youtube.com/watch?v=12cRXHaZCfw"},
+
+
+/* Rock */
+{
+  id: "Beatles",
+  parent: "Rock",
+  name: "Beatles",
+  description: "https://en.wikipedia.org/wiki/The_Beatles",
+  value: 20
+}, {
+  id: "Bon Jovi",
+  parent: "Rock",
+  name: "Bon Jovi",
+  description: "https://en.wikipedia.org/wiki/Bon_Jovi",
+  value: 7
+}, {
+  id: "Coldplay",
+  parent: "Rock",
+  name: "Coldplay",
+  description: "https://en.wikipedia.org/wiki/Coldplay",
+  value: 8
+}, {
+  id: "Cranberries",
+  parent: "Rock",
+  name: "Cranberries",
+  description: "https://en.wikipedia.org/wiki/The_Cranberries",
+  value: 5
+}, {
+  id: "Eagles",
+  parent: "Rock",
+  name: "Eagles",
+  description: "https://en.wikipedia.org/wiki/Eagles_(band)",
+  value: 9
+}, {
+  id: "Everclear",
+  parent: "Rock",
+  name: "Everclear",
+  description: "https://en.wikipedia.org/wiki/Everclear_(band)",
+  value: 5
+}, {
+  id: "Fleetwood Mac",
+  parent: "Rock",
+  name: "Fleetwood Mac",
+  description: "https://en.wikipedia.org/wiki/Fleetwood_Mac",
+  value: 3
+}, {
+  id: "Melissa Etheridge",
+  parent: "Rock",
+  name: "Melissa Etheridge",
+  description: "https://en.wikipedia.org/wiki/Melissa_Etheridge",
+  value: 5
+}, {
+  id: "Phoenix",
+  parent: "Rock",
+  name: "Phoenix",
+  description: "https://en.wikipedia.org/wiki/Phoenix_(band)",
+  value: 3
+}, {
+  id: "Queen",
+  parent: "Rock",
+  name: "Queen",
+  description: "https://en.wikipedia.org/wiki/Queen_(band)",
+  value: 9
+}, {
+  id: "Weezer",
+  parent: "Rock",
+  name: "Weezer",
+  description: "https://en.wikipedia.org/wiki/Weezer",
+  value: 6
+}, 
+
+/* ROCK SONGS */
+{ id: "8 Days a Week", parent: "Beatles",  name: "8 Days a Week", value: 1, description: "https://www.youtube.com/watch?v=kle2xHhRHg4"},
+{ id: "A Day in the Life", parent: "Beatles",  name: "A Day in the Life", value: 1, description: "https://www.youtube.com/watch?v=usNsCeOV4GM"},
+{ id: "Blackbird", parent: "Beatles",  name: "Blackbird", value: 1, description: "https://www.youtube.com/watch?v=Man4Xw8Xypo"},
+{ id: "Can't Buy Me Love", parent: "Beatles",  name: "Can't Buy Me Love", value: 1, description: "https://www.youtube.com/watch?v=h3WJiqc_bEs"},
+{ id: "Come Together", parent: "Beatles",  name: "Come Together", value: 1, description: "https://youtu.be/45cYwDMibGo"},
+{ id: "Don't Let Me Down", parent: "Beatles",  name: "Don't Let Me Down", value: 1, description: "https://www.youtube.com/watch?v=xk7f6i0CNfs"},
+{ id: "Eleanor Rigby", parent: "Beatles",  name: "Eleanor Rigby", value: 1, description: "https://www.youtube.com/watch?v=6gluNoLVKiQ"},
+{ id: "Hard Day's Night", parent: "Beatles",  name: "Hard Day's Night", value: 1, description: "https://www.youtube.com/watch?v=Yjyj8qnqkYI"},
+{ id: "Help!", parent: "Beatles",  name: "Help!", value: 1, description: "https://www.youtube.com/watch?v=2Q_ZzBGPdqE"},
+{ id: "Here Comes the Sun", parent: "Beatles",  name: "Here Comes the Sun", value: 1, description: "https://youtu.be/KQetemT1sWc"},
+{ id: "Hey Jude", parent: "Beatles",  name: "Hey Jude", value: 1, description: "https://youtu.be/A_MjCqQoLLA"},
+{ id: "In My Life", parent: "Beatles",  name: "In My Life", value: 1, description: "https://www.youtube.com/watch?v=YBcdt6DsLQA"},
+{ id: "Lucy in the Sky with Diamonds", parent: "Beatles",  name: "Lucy in the Sky with Diamonds", value: 1, description: "https://www.youtube.com/watch?v=naoknj1ebqI"},
+{ id: "Ob-La-Di, Ob-La-Da", parent: "Beatles",  name: "Ob-La-Di, Ob-La-Da", value: 1, description: "https://www.youtube.com/watch?v=_J9NpHKrKMw"},
+{ id: "Penny Lane", parent: "Beatles",  name: "Penny Lane", value: 1, description: "https://www.youtube.com/watch?v=S-rB0pHI9fU"},
+{ id: "Rocky Racoon", parent: "Beatles",  name: "Rocky Racoon", value: 1, description: "https://www.youtube.com/watch?v=qqA4ZiQaGtU"},
+{ id: "Something", parent: "Beatles",  name: "Something", value: 1, description: "https://youtu.be/UelDrZ1aFeY"},
+{ id: "While My Guitar Gently Weeps", parent: "Beatles",  name: "While My Guitar Gently Weeps", value: 1, description: "https://www.youtube.com/watch?v=VJDJs9dumZI"},
+{ id: "Yellow Submarine", parent: "Beatles",  name: "Yellow Submarine", value: 1, description: "https://www.youtube.com/watch?v=m2uTFF_3MaA"},
+{ id: "Yesterday", parent: "Beatles",  name: "Yesterday", value: 1, description: "https://www.youtube.com/watch?v=NrgmdOz227I"},
+{ id: "Bed of Roses", parent: "Bon Jovi",  name: "Bed of Roses", value: 1, description: "https://www.youtube.com/watch?v=NvR60Wg9R7Q"},
+{ id: "Born To Be My Baby", parent: "Bon Jovi",  name: "Born To Be My Baby", value: 1, description: "https://www.youtube.com/watch?v=Ahf2B_eZUc4"},
+{ id: "In These Arms", parent: "Bon Jovi",  name: "In These Arms", value: 1, description: "https://www.youtube.com/watch?v=59NoqP02ZYM"},
+{ id: "It's My Life", parent: "Bon Jovi",  name: "It's My Life", value: 1, description: "https://www.youtube.com/watch?v=vx2u5uUu3DE"},
+{ id: "Lay Your Hands On Me", parent: "Bon Jovi",  name: "Lay Your Hands On Me", value: 1, description: "https://www.youtube.com/watch?v=EhjSzibOIH4"},
+{ id: "Livin' on a Prayer", parent: "Bon Jovi",  name: "Livin' on a Prayer", value: 1, description: "https://www.youtube.com/watch?v=lDK9QqIzhwk"},
+{ id: "Thank You For Loving Me", parent: "Bon Jovi",  name: "Thank You For Loving Me", value: 1, description: "https://www.youtube.com/watch?v=n86c41TI0HA"},
+{ id: "Clocks", parent: "Coldplay",  name: "Clocks", value: 1, description: "https://www.youtube.com/watch?v=d020hcWA_Wg"},
+{ id: "Fix You", parent: "Coldplay",  name: "Fix You", value: 1, description: "https://www.youtube.com/watch?v=k4V3Mo61fJM"},
+{ id: "In My Place", parent: "Coldplay",  name: "In My Place", value: 1, description: "https://www.youtube.com/watch?v=gnIZ7RMuLpU"},
+{ id: "Shiver", parent: "Coldplay",  name: "Shiver", value: 1, description: "https://www.youtube.com/watch?v=u8XFFTWwSvY"},
+{ id: "Speed of Sound", parent: "Coldplay",  name: "Speed of Sound", value: 1, description: "https://www.youtube.com/watch?v=0k_1kvDh2UA"},
+{ id: "The Scientist", parent: "Coldplay",  name: "The Scientist", value: 1, description: "https://www.youtube.com/watch?v=RB-RcX5DS5A"},
+{ id: "Viva La Vida", parent: "Coldplay",  name: "Viva La Vida", value: 1, description: "https://www.youtube.com/watch?v=dvgZkm1xWPE"},
+{ id: "Yellow", parent: "Coldplay",  name: "Yellow", value: 1, description: "https://www.youtube.com/watch?v=yKNxeF4KMsY"},
+{ id: "Dreams", parent: "Cranberries",  name: "Dreams", value: 1, description: "https://www.youtube.com/watch?v=Yam5uK6e-bQ"},
+{ id: "Linger", parent: "Cranberries",  name: "Linger", value: 1, description: "https://www.youtube.com/watch?v=G6Kspj3OO0s"},
+{ id: "Ode to my Family", parent: "Cranberries",  name: "Ode to my Family", value: 1, description: "https://www.youtube.com/watch?v=Zz-DJr1Qs54"},
+{ id: "Promises", parent: "Cranberries",  name: "Promises", value: 1, description: "https://www.youtube.com/watch?v=hUFPooqKllA"},
+{ id: "Zombie", parent: "Cranberries",  name: "Zombie", value: 1, description: "https://www.youtube.com/watch?v=6Ejga4kJUts"},
+{ id: "Already Gone", parent: "Eagles",  name: "Already Gone", value: 1, description: "https://www.youtube.com/watch?v=sk6iJcikg-U"},
+{ id: "Desperado", parent: "Eagles",  name: "Desperado", value: 1, description: "https://www.youtube.com/watch?v=hhe0ULrAHIw"},
+{ id: "Hotel California", parent: "Eagles",  name: "Hotel California", value: 1, description: "https://www.youtube.com/watch?v=EqPtz5qN7HM"},
+{ id: "Love Will Keep Us Alive", parent: "Eagles",  name: "Love Will Keep Us Alive", value: 1, description: "https://www.youtube.com/watch?v=chThmw_qJmk"},
+{ id: "Lyin' Eyes", parent: "Eagles",  name: "Lyin' Eyes", value: 1, description: "https://www.youtube.com/watch?v=5-NlR54PqLw"},
+{ id: "New Kid in Town", parent: "Eagles",  name: "New Kid in Town", value: 1, description: "https://www.youtube.com/watch?v=-Pa5nqYXEnY"},
+{ id: "Peaceful Easy Feeling", parent: "Eagles",  name: "Peaceful Easy Feeling", value: 1, description: "https://www.youtube.com/watch?v=VLmmFq4vrLY"},
+{ id: "Take It Easy", parent: "Eagles",  name: "Take It Easy", value: 1, description: "https://www.youtube.com/watch?v=LfeNhwnO8hw"},
+{ id: "Take it to the Limit", parent: "Eagles",  name: "Take it to the Limit", value: 1, description: "https://www.youtube.com/watch?v=bO4HnZ7XLsU"},
+{ id: "AM Radio", parent: "Everclear",  name: "AM Radio", value: 1, description: "https://www.youtube.com/watch?v=hjg39XRkjVc"},
+{ id: "Father of Mine", parent: "Everclear",  name: "Father of Mine", value: 1, description: "https://www.youtube.com/watch?v=kkcbxjWG9Mc"},
+{ id: "I Will Buy You a New Life", parent: "Everclear",  name: "I Will Buy You a New Life", value: 1, description: "https://www.youtube.com/watch?v=W05cPXpUHGI"},
+{ id: "Learning How To Smile", parent: "Everclear",  name: "Learning How To Smile", value: 1, description: "https://www.youtube.com/watch?v=-WTyClDgP_M"},
+{ id: "Wonderful", parent: "Everclear",  name: "Wonderful", value: 1, description: "https://www.youtube.com/watch?v=MUfgAbFY4CA"},
+{ id: "Landslide", parent: "Fleetwood Mac",  name: "Landslide", value: 1, description: "https://www.youtube.com/watch?v=WM7-PYtXtJM"},
+{ id: "Rhiannon", parent: "Fleetwood Mac",  name: "Rhiannon", value: 1, description: "https://www.youtube.com/watch?v=jQAK6sVovUk"},
+{ id: "The Chain", parent: "Fleetwood Mac",  name: "The Chain", value: 1, description: "https://www.youtube.com/watch?v=kBYHwH1Vb-c"},
+{ id: "Come to my Window", parent: "Melissa Etheridge",  name: "Come to my Window", value: 1, description: "https://www.youtube.com/watch?v=Gk4CwPQCbAE"},
+{ id: "I Need to Wake Up", parent: "Melissa Etheridge",  name: "I Need to Wake Up", value: 1, description: "https://www.youtube.com/watch?v=JUVqUz8m2PQ"},
+{ id: "I Want to Come Over", parent: "Melissa Etheridge",  name: "I Want to Come Over", value: 1, description: "https://www.youtube.com/watch?v=Ckt0TuK0qv0"},
+{ id: "I'm the Only One", parent: "Melissa Etheridge",  name: "I'm the Only One", value: 1, description: "https://www.youtube.com/watch?v=oCphbDRkZSo"},
+{ id: "Like the Way I Do", parent: "Melissa Etheridge",  name: "Like the Way I Do", value: 1, description: "https://www.youtube.com/watch?v=p33tgPzHek0"},
+{ id: "Lisztomania", parent: "Phoenix",  name: "Lisztomania", value: 1, description: "https://www.youtube.com/watch?v=4BJDNw7o6so"},
+{ id: "Long Distance Call", parent: "Phoenix",  name: "Long Distance Call", value: 1, description: "https://www.youtube.com/watch?v=owD3d1S0LFg"},
+{ id: "Run Run Run", parent: "Phoenix",  name: "Run Run Run", value: 1, description: "https://www.youtube.com/watch?v=7ly6oFF77Sk"},
+{ id: "Another One Bites the Dust", parent: "Queen",  name: "Another One Bites the Dust", value: 1, description: "https://www.youtube.com/watch?v=rY0WxgSXdEE"},
+{ id: "Bohemian Rhapsody", parent: "Queen",  name: "Bohemian Rhapsody", value: 1, description: "https://www.youtube.com/watch?v=fJ9rUzIMcZQ"},
+{ id: "Don't Stop Me Now", parent: "Queen",  name: "Don't Stop Me Now", value: 1, description: "https://www.youtube.com/watch?v=HgzGwKwLmgM"},
+{ id: "I Was Born To Love You", parent: "Queen",  name: "I Was Born To Love You", value: 1, description: "https://www.youtube.com/watch?v=Fna56a_r41s"},
+{ id: "Love of My Life", parent: "Queen",  name: "Love of My Life", value: 1, description: "https://www.youtube.com/watch?v=sUJkCXE4sAA"},
+{ id: "Radio Ga Ga", parent: "Queen",  name: "Radio Ga Ga", value: 1, description: "https://www.youtube.com/watch?v=azdwsXLmrHE"},
+{ id: "Somebody To Love", parent: "Queen",  name: "Somebody To Love", value: 1, description: "https://www.youtube.com/watch?v=kijpcUv-b8M"},
+{ id: "We are the Champions", parent: "Queen",  name: "We are the Champions", value: 1, description: "https://www.youtube.com/watch?v=04854XqcfCY"},
+{ id: "We Will Rock You", parent: "Queen",  name: "We Will Rock You", value: 1, description: "https://www.youtube.com/watch?v=-tJYN-eG1zk"},
+{ id: "Back to the Shack", parent: "Weezer",  name: "Back to the Shack", value: 1, description: "https://www.youtube.com/watch?v=3H89GXU9OeU"},
+{ id: "Beverly Hills", parent: "Weezer",  name: "Beverly Hills", value: 1, description: "https://www.youtube.com/watch?v=HL_WvOly7mY"},
+{ id: "Buddy Holly", parent: "Weezer",  name: "Buddy Holly", value: 1, description: "https://www.youtube.com/watch?v=kemivUKb4f4"},
+{ id: "El Scorcho", parent: "Weezer",  name: "El Scorcho", value: 1, description: "https://www.youtube.com/watch?v=okthJIVbi6g"},
+{ id: "Happy Together", parent: "Weezer",  name: "Happy Together", value: 1, description: "https://www.youtube.com/watch?v=i--uixPYvEk"},
+{ id: "Say It Ain't So", parent: "Weezer",  name: "Say It Ain't So", value: 1, description: "https://www.youtube.com/watch?v=ENXvZ9YRjbo'"}
+
+];
+
+//==========================================================
+
+
+// Splice in transparent for the center circle
+Highcharts.getOptions().colors.splice(0, 0, 'transparent');
+
+
+Highcharts.chart('container', {
+
+  chart: {
+    height: '70%'
+  },
+
+  title: {
+    useHTML: true,
+    text: '<div style="font-family:arial; font-size:20px; text-align:center;font-weight:bold;">--- Interactive Sunburst Chart ---</div><div style="font-family:arial; font-size:30px; text-align:center;font-weight:bold;">My Music Library by Genre and Artist</div>'
+    
+  },
+  subtitle: {
+    useHTML: true,
+    text: '<div style="font-family:arial; font-size:16px; text-align:center;">A collection of songs from my music library categorized by genre and artist/band.<br><br></div>'
+  },
+  series: [{
+    type: "sunburst",
+    data: data,
+    allowDrillToNode: true,
+    cursor: 'pointer',
+    dataLabels: {
+	  format: '<div style="font-family:arial, san-serif; font-size:8px; font-weight=lighter; word-wrap:break-word;">{point.name}</div>',
+      filter: {
+        property: 'innerArcLength',
+        operator: '>',
+        value: 8
+      },
+      rotationMode: 'circular'
+    },
+    levels: [{
+      level: 1,
+      levelIsConstant: false,
+      dataLabels: {
+		format: '<div style="font-family:arial, san-serif; font-size:16px; font-weight=lighter; word-wrap:break-word;">{point.name}</div>',
+        filter: {
+          property: 'outerArcLength',
+          operator: '>',
+          value: 25
+        }
+      }
+    }, {
+      level: 2,
+      colorByPoint: true,
+	  dataLabels: {
+		format: '<div style="font-family:arial, san-serif; font-size:14px; font-weight=lighter; vertical-align:top;stroke-width:0px; stroke-linejoin=bevel;">{point.name}</div>',
+        filter: {
+          property: 'outerArcLength',
+          operator: '>',
+          value: 15
+        }
+      }
+    },
+    {
+      level: 3,
+      colorVariation: {
+        key: 'brightness',
+        to: -0.5
+      },
+	  dataLabels: {
+		format: '<div style="font-family:arial, san-serif; font-size:12px; font-weight=lighter; word-wrap:break-word; stroke-width:0px; stroke-linejoin=bevel;">{point.name}</div>',
+        filter: {
+          property: 'outerArcLength',
+          operator: '>',
+          value: 15
+        }
+      }
+    }, {
+      level: 4,
+      colorVariation: {
+        key: 'brightness',
+        to: 0.5
+      },
+	  dataLabels: {
+		format: '<div style="font-family:arial, san-serif; font-size:10px; font-weight=lighter; word-wrap:break-word;stroke-width:0px; stroke-linejoin=bevel;">{point.name}</div>',
+        filter: {
+          property: 'outerArcLength',
+          operator: '>',
+          value: 15
+        }
+      }
+    }]
+
+  }],
+  tooltip: {
+    useHTML: true,
+    headerFormat: "",
+    pointFormat: '<div style="font-size:10;font-weight:bold;">{point.parent}</div><div style="font-size:12;font-weight:bold;"><a target="_blank" href="{point.description}">{point.name}<a></div><div style="font-size:8;">Song Count: {point.value}</div>',
+    style: {
+      pointerEvents: 'auto'
+    }
+  }
+  
+});
+
+</script>
+
+</body>
+</html>
